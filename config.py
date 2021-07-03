@@ -1,4 +1,4 @@
 SQLALCHEMY_DATABASE_URI = 'mysql://root:root@localhost:3306/testedb'
 SQLALCHEMY_TRACK_MODIFICATIONS = False
 DEBUG = True
-JWT_SECRET_KEY = 'wilson1576'
+JWT_SECRET_KEY = ''
