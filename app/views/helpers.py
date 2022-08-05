@@ -7,20 +7,17 @@ from datetime import datetime, timedelta
 
 jwt = JWTManager(app)
 
-
 def auth():
     auth = request.authorization
-    if not auth or not auth.username or not auth.password:
+    try:
+        user = user_by_username(auth.username)
+        if not user:
+            return jsonify({"message": "User not found", "data": {}}), 401
+
+        if user and check_password_hash(user.password, auth.password):
+            token = create_access_token(identity=user.username, expires_delta=timedelta(minutes=20))
+
+            return jsonify({"message": "Authentication Successfully", "token": token,
+                            "exp": datetime.now() + timedelta(minutes=20)})
+    except:
         return jsonify({"message": "Could not verify"}), 401
-
-    user = user_by_username(auth.username)
-    if not user:
-        return jsonify({"message": "User not found", "data": {}}), 401
-
-    if user and check_password_hash(user.password, auth.password):
-        token = create_access_token(identity=user.username, expires_delta=timedelta(minutes=20))
-
-        return jsonify({"message": "Authentication Successfully", "token": token,
-                        "exp": datetime.now() + timedelta(minutes=20)})
-
-    return jsonify({"message": "Could not verify"}), 401

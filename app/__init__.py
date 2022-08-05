@@ -10,3 +10,4 @@ ma = Marshmallow(app)
 from .models import users
 from .views import users, helpers
 from .routes import routes
+from .testes import unit_test

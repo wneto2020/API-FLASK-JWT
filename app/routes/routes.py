@@ -1,5 +1,5 @@
 from app import app
-from flask import jsonify
+from flask import jsonify, request
 from flask_jwt_extended import jwt_required, get_jwt_identity
 from ..views import users, helpers
 
@@ -12,25 +12,19 @@ def hello():
 
 @app.route('/users', methods=['POST'])
 def post_user():
-    return users.post_user()
+    return users.post_user(request.json['username'], request.json['password'])
 
 
 @app.route('/users', methods=['PUT'])
 @jwt_required()
 def update_user():
-    return users.update_user()
-
-
-@app.route('/users/<username>', methods=['GET'])
-@jwt_required()
-def get_user(username):
-    return users.get_user(username)
+    return users.update_user(request.json['username'], request.json['password'])
 
 
 @app.route('/users', methods=['DELETE'])
 @jwt_required()
 def delete_user():
-    return users.delete_user()
+    return users.delete_user(request.json['username'])
 
 
 @app.route('/auth', methods=['POST'])
